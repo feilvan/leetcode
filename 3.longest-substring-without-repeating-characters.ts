@@ -5,7 +5,7 @@
  */
 
 // * TESTCASE
-const s = "pwwkew";
+const s = "abcabcbb";
 
 // @lc code=start
 function lengthOfLongestSubstring(s: string): number {
@@ -13,16 +13,16 @@ function lengthOfLongestSubstring(s: string): number {
   let longest: string[] = [];
   let current: string[] = [];
   sArr.forEach((v) => {
-    console.log(v, current);
     if (current.includes(v)) {
-      current = [];
-      current.push(v);
-    } else {
-      current.push(v);
+      while (current[0] !== v) current.shift();
+      current.shift();
     }
-    if (current.length >= longest.length) longest = current;
+    current.push(v);
+    if (current.length > longest.length) {
+      while (longest.length > 0) longest.pop();
+      current.forEach((v) => longest.push(v));
+    }
   });
-  console.log(longest);
   return longest.length;
 }
 // @lc code=end
@@ -30,5 +30,8 @@ function lengthOfLongestSubstring(s: string): number {
 lengthOfLongestSubstring(s);
 
 /*
-18m:51s  408/988 cases passed
+18m:51s  408/988 cases passed (N/A)
+57m:25s  988/988 cases passed (6 ms)
+         Your runtime beats 65 % of typescript submissions
+         Your memory usage beats 78.14 % of typescript submissions (58.5 MB)
 */
