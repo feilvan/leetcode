@@ -5,17 +5,19 @@
  */
 
 // * TESTCASE
-const t = "aaaa";
+const t = "abbcccba";
 // @lc code=start
 function longestPalindrome(s: string): string {
-  if (s.length === 1) return s;
-
   interface subsIndex {
     start: number;
     finish: number;
   }
   const sArr = s.split("");
+  const sArrRev = sArr.toReversed();
   let longest: subsIndex = { start: 0, finish: 0 };
+
+  // early return for already palindrome string
+  if (sArr.every((v, i) => v === sArrRev[i])) return sArr.join("");
 
   function checkNeighbors(start: number, finish: number): subsIndex {
     // palindrome
@@ -36,19 +38,17 @@ function longestPalindrome(s: string): string {
     let start = Math.max(0, i - 1);
     let finish = Math.min(r.length - 1, i + 1);
     let res = checkNeighbors(start, finish);
-    console.log(i, res);
+    console.log(i, v, res, sArr.slice(res.start, res.finish + 1));
     while (subs.finish - subs.start < res.finish - res.start) {
       res = checkNeighbors(start, finish);
       subs = { start: res.start, finish: res.finish };
-      console.log(i, res);
     }
     subs = { start: res.start, finish: res.finish };
-    console.log(i, res);
     if (subs.finish - subs.start > longest.finish - longest.start)
       longest = { start: subs.start, finish: subs.finish };
   });
   const out: string = sArr.slice(longest.start, longest.finish + 1).join("");
-  // console.log(out);
+  console.log(out);
   return out;
 }
 // @lc code=end
@@ -57,4 +57,21 @@ longestPalindrome(t);
 /*
 137m07s 26/143 cases passed (N/A)
         (i'm tired. looks like i can't solve this. i feel so dumb.)
+172m49s 75/143 cases passed (N/A)
+
+* START ENLIGHTENMENT
+
+b a a b d
+---------
+    a     Y
+  a a     Y
+    a b   N
+---------
+  a a     Y
+b a a     N
+  a a b   N
+---------
+b a a b   Y
+
+* END ENLIGHTENMENT
 */
